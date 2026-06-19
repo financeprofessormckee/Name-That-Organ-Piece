@@ -65,6 +65,11 @@ let current = null;      // the answer piece
 let visualObj = null;    // abcjs render result, reused for playback
 let answered = false;
 let synth = null;        // active CreateSynth instance, if any
+let audioCtx = null;     // shared AudioContext, created on first play
+
+// Full General MIDI soundfont — includes the church organ (program 19). abcjs's
+// built-in default soundfont is piano-only, so the organ voicing needs this one.
+const SOUND_FONT_URL = "https://paulrosen.github.io/midi-js-soundfonts/FluidR3_GM/";
 
 function renderScore(piece) {
   scoreEl.innerHTML = "";
@@ -184,14 +189,23 @@ async function play() {
   playBtn.disabled = true;
   playNote.textContent = "loading sound…";
   try {
+    // Create/resume the audio context inside the click gesture (autoplay policy).
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === "suspended") await audioCtx.resume();
+
     synth = new window.ABCJS.synth.CreateSynth();
-    await synth.init({ visualObj });
+    await synth.init({
+      audioContext: audioCtx,
+      visualObj,
+      options: { soundFontUrl: SOUND_FONT_URL },
+    });
     await synth.prime();
     synth.start();
     playNote.textContent = "playing (church-organ voicing)";
   } catch (err) {
-    playNote.textContent = "Couldn't play — needs an internet connection for sounds.";
     console.error("Playback failed:", err);
+    const detail = err && (err.message || err.status) ? (err.message || err.status) : String(err);
+    playNote.textContent = `Couldn't play: ${detail}`;
   } finally {
     playBtn.disabled = false;
   }
