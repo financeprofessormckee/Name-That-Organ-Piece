@@ -4,8 +4,6 @@ A musical trivia drill: the opening bars of a famous organ/classical work appear
 as engraved notation, and you name the piece and composer from four choices. You
 can also hear the snippet played back.
 
-**Play it:** https://financeprofessormckee.github.io/Name-That-Organ-Piece/
-
 **Scoring:** one point per correct identification; tracks streak, best streak
 (saved in your browser), and accuracy.
 
@@ -31,6 +29,16 @@ block and fill it in; to fix a wrong note, just edit the `abc` string.
 > please verify the notes and correct anything off. The notation never shows the
 > title or composer, so it doesn't give the answer away.
 
+### Tournemire / *L'Orgue mystique* — the chant convention
+
+Tournemire's modal writing can't be reliably transcribed from memory, so those
+entries are handled differently: the notation shows the **Gregorian chant the
+office paraphrases** (e.g. *Ave maris stella* for the Assumption's Paraphrase-
+Carillon), not Tournemire's own notes. The game becomes "name the office from its
+proper chant," and the revealed fact explains the link. Office numbers are
+confirmed from IMSLP; the chant melodies are best-effort drafts to verify against
+the *Liber Usualis*.
+
 ## What's bundled
 
 - `vendor/abcjs-basic-min.js` — the [abcjs](https://abcjs.net) library (v6.4.4)
@@ -41,29 +49,8 @@ block and fill it in; to fix a wrong note, just edit the `abc` string.
   alongside the code, which this file satisfies; you're free to use, deploy, and
   modify it, including for class. No attribution is required in the page UI.
 
-## Run it locally
-
-Either double-click `index.html`, or serve the folder and open the address it
-prints:
-
-```
-python -m http.server 8000
-```
-
-## Deploying (GitHub Pages)
-
-Ready to deploy as-is: the files live at the repo root and a `.nojekyll` marker
-tells Pages to serve them without Jekyll processing. In **Settings → Pages**, set
-the source to the `main` branch (root); the site publishes at the URL above.
-
-## License
-
-This activity's own code is **MIT-licensed** — see [`LICENSE`](LICENSE). The
-bundled abcjs library is separately MIT-licensed; its notice ships in
-[`vendor/abcjs.LICENSE`](vendor/abcjs.LICENSE).
-
 ## Possible future additions
 
 - A "type the answer" mode with forgiving text matching.
 - Separate the question into title and composer for two points.
-- A "harder" mode that shows fewer bars.
+- A real organ voicing for playback, and a "harder" mode that shows fewer bars.
